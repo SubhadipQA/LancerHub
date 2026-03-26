@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+enum Role {
+  client
+  freelancer
+}
+enum ProjectStatus {
+  open
+  in_progress
+  completed
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  first_name  String
+  last_name   String
+  email       String   @unique
+  avatar      String?
+  bio         String?
+  country     String?
+  state       String?
+  city        String?
+  zip         String?
+  designation String?
+  role        Role     @default(freelancer)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  projects    Project[]
+  proposals   Proposal[]
+}
+
+model Project {
+  id            Int       @id @default(autoincrement())
+  title         String
+  slug          String    @unique
+  description   String?
+  short_desc    String?
+  budget        Float
+  status        ProjectStatus @default(open)
+  tech_stack    String[]
+  bidding_start DateTime?
+  bidding_end   DateTime?
+  deadline      DateTime?
+  ownerId       Int
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+
+  owner     User       @relation(fields: [ownerId], references: [id])
+  proposals Proposal[]
+}
+
+model Proposal {
+  id               Int       @id @default(autoincrement())
+  project_id       Int
+  user_id          Int
+  bidding_price    Float?
+  bidding_deadline DateTime?
+  cover_letter     String?
+  previous_works   String[]
+  status           String    @default("pending")
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+
+  project Project @relation(fields: [project_id], references: [id])
+  user    User    @relation(fields: [user_id], references: [id])
+}
