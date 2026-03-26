@@ -162,7 +162,7 @@ NEXT_PUBLIC_BASE_URL="http://localhost:3000"
 
 Built while learning Next.js from scratch to advanced level.
 
-- GitHub: [@your-username](https://github.com/SubhadipQA)
+- GitHub: [@Subhadip](https://github.com/SubhadipQA)
 
 ---
 
